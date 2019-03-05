@@ -100,7 +100,7 @@ class TagIter(object):
 
         if self.end_reached:
             raise StopIteration
-        
+
         match = constants.TAG_RE.search(self.html_string, pos=self.pos)
         if not match:
             self.end_reached = True
