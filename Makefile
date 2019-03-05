@@ -26,7 +26,7 @@ $(ENV_DIR):
 	virtualenv -p $(PYTHON) $(ENV_DIR)
 
 build_reqs: env
-	$(IN_ENV) pip install sphinx pep8 coverage nose unify
+	$(IN_ENV) pip install sphinx pycodestyle coverage nose unify
 
 build: build_reqs
 	$(IN_ENV) pip install --editable .
@@ -37,10 +37,10 @@ sdist: build
 unify: build_reqs
 	- $(IN_ENV) unify --in-place --recursive src/
 
-lint: pep8
+lint: pycodestyle
 
-pep8: build_reqs
-	- $(IN_ENV) pep8 src/htmldiff > pep8.out
+pycodestyle: build_reqs
+	- $(IN_ENV) pycodestyle src/htmldiff > pycodestyle.out
 
 docs: build
 	$(IN_ENV) pip install -r docs/requirements.txt

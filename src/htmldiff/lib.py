@@ -150,7 +150,8 @@ class HTMLMatcher(SequenceMatcher):
         LOG.debug('Initializing HTMLMatcher...')
         if accurate_mode:
             LOG.debug('Using accurate mode')
-            SequenceMatcher.__init__(self, lambda x: False, source1, source2, False)
+            SequenceMatcher.__init__(self,
+                                     lambda x: False, source1, source2, False)
         else:
             LOG.debug('Using fast mode')
             SequenceMatcher.__init__(self, is_junk, source1, source2, False)

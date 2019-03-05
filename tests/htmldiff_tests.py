@@ -5,10 +5,11 @@ import os
 class DiffTest(unittest.TestCase):
 
     def setUp(self):
-       pass
+        pass
 
     def test_risky_mode(self):
-	pass
+        pass
+
     def test_accurate_mode(self):
         pass
 
