@@ -216,6 +216,7 @@ class HTMLMatcher(SequenceMatcher):
             if item.startswith(bytes('<', 'utf-8')):
                 self.out_delete(''.join(text), out)
                 text = []
+                out.write(item)
             else:
                 text.append(item.decode('utf-8'))
         self.out_delete(''.join(text), out)
