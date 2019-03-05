@@ -133,18 +133,20 @@ class TagStrip(HTMLParser):
 class HTMLMatcher(SequenceMatcher):
     """SequenceMatcher for HTML data."""
 
-    start_insert_text = '<span class="insert">'
-    end_span_text = '</span>'
-    start_delete_text = '<span class="delete">'
-    stylesheet = (
-            '.insert {\n\tbackground-color: #AFA\n}\n'
-            '.delete {\n'
-            '\tbackground-color: #F88;\n'
-            '\ttext-decoration: line-through;\n'
-            '}\n'
-            '.tagInsert {\n\tbackground-color: #070;\n\tcolor: #FFF\n}\n'
-            '.tagDelete {\n\tbackground-color: #700;\n\tcolor: #FFF\n}\n'
-        )
+    start_insert_text = '<ins>'
+    end_insert_text = '</ins>'
+    start_delete_text = '<del>'
+    end_delete_text = '</del>'
+    stylesheet = """
+                 del {
+                       text-decoration: line-through;
+                       background-color: #fbb;
+                       color: #555;
+                     }
+                 ins {
+                       text-decoration: none;
+                       background-color: #d4fcbc;
+                     }"""
 
     def __init__(self, source1, source2, accurate_mode):
         LOG.debug('Initializing HTMLMatcher...')
@@ -230,21 +232,20 @@ class HTMLMatcher(SequenceMatcher):
                 out.write(item)
             else:
                 text.append(item.decode('utf-8'))
-        print(text)
         self.out_insert(''.join(text), out)
 
     def out_delete(self, s, out):
         if not s.strip():
             val = s
         else:
-            val = ''.join((self.start_delete_text, s, self.end_span_text))
+            val = ''.join((self.start_delete_text, s, self.end_delete_text))
         out.write(bytes(val, 'utf-8'))
 
     def out_insert(self, s, out):
         if not s.strip():
             val = s
         else:
-            val = ''.join((self.start_insert_text, s, self.end_span_text))
+            val = ''.join((self.start_insert_text, s, self.end_insert_text))
         out.write(bytes(val, 'utf-8'))
 
     def insert_stylesheet(self, html, stylesheet=None):
