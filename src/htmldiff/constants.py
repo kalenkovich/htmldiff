@@ -9,7 +9,7 @@ WS_RE = re.compile(b'^([ \n\r\t]|&nbsp;)+$')
 WORD_RE = re.compile(
     b'([^ \n\r\t,.&;/#=<>()-]+|(?:[ \n\r\t]|&nbsp;)+|[,.&;/#=<>()-])'
 )
-
+ID_HREF_REPLACE = re.compile(b' (id|href)=\"[#A-Za-z_]+?[#\w\-\:\.].*?\"')
 
 STOPWORDS = (
     'a',

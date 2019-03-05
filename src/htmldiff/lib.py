@@ -203,6 +203,9 @@ class HTMLMatcher(SequenceMatcher):
         if len(seq1) != len(seq2):
             return False
         for i in range(0, len(seq1)):
+            # Remove ids and hrefs from comparison -- probably brittle
+            seq1[i] = constants.ID_HREF_REPLACE.sub(bytes('', 'utf-8'), seq1[i])
+            seq2[i] = constants.ID_HREF_REPLACE.sub(bytes('', 'utf-8'), seq2[i])
             if seq1[i][0] == '<' and seq2[i][0] == '<':
                 continue
             if all((constants.WS_RE.match(seq1[i]),
