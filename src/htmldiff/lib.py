@@ -4,7 +4,7 @@
 .. moduleauthor:: Ian Bicking, Brant Watson <brant.watson@propylon.com>
 """
 # Standard Imports
-import HTMLParser
+from html.parser import HTMLParser
 import logging
 from copy import copy
 from difflib import SequenceMatcher
@@ -100,7 +100,7 @@ class TagIter(object):
 
         if self.end_reached:
             raise StopIteration
-
+        
         match = constants.TAG_RE.search(self.html_string, pos=self.pos)
         if not match:
             self.end_reached = True
@@ -115,7 +115,7 @@ class TagIter(object):
         return self.__next__()
 
 
-class TagStrip(HTMLParser.HTMLParser):
+class TagStrip(HTMLParser):
     """
     Subclass of HTMLParser used to strip html tags from strings
     """
@@ -163,7 +163,7 @@ class HTMLMatcher(SequenceMatcher):
         LOG.debug('Splitting html into tag pieces and words')
         result = []
         for item in TagIter(t):
-            if item.startswith('<'):
+            if item.startswith(bytes('<','utf-8')):
                 result.append(item)
             else:
                 result.extend(constants.WORD_RE.findall(item))
@@ -213,22 +213,23 @@ class HTMLMatcher(SequenceMatcher):
     def text_delete(self, lst, out):
         text = []
         for item in lst:
-            if item.startswith('<'):
+            if item.startswith(bytes('<', 'utf-8')):
                 self.out_delete(''.join(text), out)
                 text = []
             else:
-                text.append(item)
+                text.append(item.decode('utf-8'))
         self.out_delete(''.join(text), out)
 
     def text_insert(self, lst, out):
         text = []
         for item in lst:
-            if item.startswith('<'):
+            if item.startswith(bytes('<', 'utf-8')):
                 self.out_insert(''.join(text), out)
                 text = []
                 out.write(item)
             else:
-                text.append(item)
+                text.append(item.decode('utf-8'))
+        print(text)
         self.out_insert(''.join(text), out)
 
     def out_delete(self, s, out):
@@ -236,14 +237,14 @@ class HTMLMatcher(SequenceMatcher):
             val = s
         else:
             val = ''.join((self.start_delete_text, s, self.end_span_text))
-        out.write(val)
+        out.write(bytes(val, 'utf-8'))
 
     def out_insert(self, s, out):
         if not s.strip():
             val = s
         else:
             val = ''.join((self.start_insert_text, s, self.end_span_text))
-        out.write(val)
+        out.write(bytes(val, 'utf-8'))
 
     def insert_stylesheet(self, html, stylesheet=None):
         """
@@ -263,11 +264,11 @@ class HTMLMatcher(SequenceMatcher):
         match = constants.HEAD_RE.search(html)
         pos = match.end() if match else 0
         return ''.join((
-            html[:pos],
+            (html[:pos]).decode('utf-8'),
             '\n<style type="text/css">\n',
             stylesheet,
             '</style>',
-            html[pos:],
+            (html[pos:]).decode('utf-8'),
         ))
 
 
@@ -305,13 +306,13 @@ def diff_files(initial_path, new_path, accurate_mode):
     :returns: string containing diffed html from initial_path and new_path
     """
     # Open the files
-    with open(initial_path) as f:
+    with open(initial_path, 'rb') as f:
         LOG.debug('Reading file: {0}'.format(initial_path))
-        source1 = constants.COMMENT_RE.sub('', f.read())
+        source1 = constants.COMMENT_RE.sub(bytes('','utf-8'), f.read())
 
-    with open(new_path) as f:
+    with open(new_path, 'rb') as f:
         LOG.debug('Reading file: {0}'.format(new_path))
-        source2 = constants.COMMENT_RE.sub('', f.read())
+        source2 = constants.COMMENT_RE.sub(bytes('','utf-8'), f.read())
 
     return diff_strings(source1, source2, accurate_mode)
 

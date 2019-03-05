@@ -1,12 +1,12 @@
 """Constants."""
 import re
 
-COMMENT_RE = re.compile(r'<!--.*?-->', re.S)
-TAG_RE = re.compile(r'<script.*?>.*?</script>|<.*?>', re.S)
-HEAD_RE = re.compile(r'<\s*head\s*>', re.S | re.I)
-WS_RE = re.compile(r'^([ \n\r\t]|&nbsp;)+$')
+COMMENT_RE = re.compile(b'<!--.*?-->', re.S)
+TAG_RE = re.compile(b'<script.*?>.*?</script>|<.*?>', re.S)
+HEAD_RE = re.compile(b'<\s*head\s*>', re.S | re.I)
+WS_RE = re.compile(b'^([ \n\r\t]|&nbsp;)+$')
 WORD_RE = re.compile(
-    r'([^ \n\r\t,.&;/#=<>()-]+|(?:[ \n\r\t]|&nbsp;)+|[,.&;/#=<>()-])'
+    b'([^ \n\r\t,.&;/#=<>()-]+|(?:[ \n\r\t]|&nbsp;)+|[,.&;/#=<>()-])'
 )
 
 

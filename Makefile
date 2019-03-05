@@ -1,4 +1,4 @@
-PYTHON=python2.7
+PYTHON=python3
 
 ENV_DIR=.env_$(PYTHON)
 
@@ -14,11 +14,11 @@ env: $(ENV_DIR)
 	$(IN_ENV) pip install -U pip
 
 test: build
-	$(IN_ENV) nosetests -v --with-xunit --xunit-file=test_results.xml --with-coverage --cover-erase --cover-xml  --cover-package=htmldiff
+	$(IN_ENV) nosetests -v --with-xunit --xunit-file=test_results.xml --with-coverage --cover-erase --cover-xml --cover-package=htmldiff
 
 # Quick test invoke
 qt:
-	$(IN_ENV) nosetests -v --with-xunit --xunit-file=test_results.xml --with-coverage --cover-erase --cover-xml  --cover-package=htmldiff
+	$(IN_ENV) nosetests -v --with-xunit --xunit-file=test_results.xml --with-coverage --cover-erase --cover-xml --cover-package=htmldiff
 
 artifacts: build sdist
 
