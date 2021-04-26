@@ -27,6 +27,11 @@ Or via pip::
 Pip may also be used to install a built package::
 
     $ pip install htmldiff-1.0.0.dev6.tar.gz
+    
+    
+To install without cloning/downloading the repository (requires Git installed)::
+
+    $ pip install git+https://github.com/danyill/htmldiff.git
 
 
 Usage
